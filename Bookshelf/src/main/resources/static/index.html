@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        table, th, td { border: 1px solid black; }
+        th, td { padding: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+<h1>Bookshelf</h1>
+<table id="booksTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Author</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Books will be loaded here -->
+    </tbody>
+</table>
+
+<h2>Add Book</h2>
+<form id="addBookForm">
+    <label>Name: <input type="text" name="name" required></label><br>
+    <label>Description: <input type="text" name="description" required></label><br>
+    <label>Author: <input type="text" name="author" required></label><br>
+    <button type="submit">Add Book</button>
+</form>
+
+<script>
+    const baseUrl = "http://localhost:8080/api/books";
+
+    // Fetch and display books
+    function loadBooks() {
+        fetch(baseUrl)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector("#booksTable tbody");
+                tableBody.innerHTML = '';
+                data.forEach(book => {
+                    const row = `
+                            <tr>
+                                <td>${book.id}</td>
+                                <td>${book.name}</td>
+                                <td>${book.description}</td>
+                                <td>${book.author}</td>
+                                <td>
+                                    <button onclick="deleteBook(${book.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    tableBody.innerHTML += row;
+                });
+            });
+    }
+
+    // Add book
+    document.getElementById("addBookForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const book = Object.fromEntries(formData.entries());
+        fetch(baseUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(book)
+        }).then(() => {
+            loadBooks();
+            this.reset();
+        });
+    });
+
+    // Delete book
+    function deleteBook(id) {
+        fetch(`${baseUrl}/${id}`, { method: "DELETE" })
+            .then(() => loadBooks());
+    }
+
+    // Initial load
+    loadBooks();
+</script>
+</body>
+</html>
