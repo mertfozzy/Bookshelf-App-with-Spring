@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Books</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 20px;
+    }
+    /* Dark Mode Styles */
+    .dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .dark-mode .thead-dark {
+      background-color: #333;
+    }
+    .dark-mode .table {
+      background-color: #222;
+      color: #fff;
+    }
+    .dark-mode .btn {
+      background-color: #444;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+<button class="btn btn-secondary btn-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+<div class="container">
+  <h1>Bookshelf</h1>
+  <a href="index.html" class="btn btn-secondary mb-3">Back to Home</a>
+  <table class="table table-striped" id="booksTable">
+    <thead class="thead-dark">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Author</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Books will be loaded here -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const baseUrl = "http://localhost:8080/api/books";
+
+  function loadBooks() {
+    fetch(baseUrl)
+            .then(response => response.json())
+            .then(data => {
+              const tableBody = document.querySelector("#booksTable tbody");
+              tableBody.innerHTML = '';
+              data.forEach(book => {
+                const row = `
+                            <tr>
+                                <td>${book.id}</td>
+                                <td>${book.name}</td>
+                                <td>${book.description}</td>
+                                <td>${book.author}</td>
+                                <td>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteBook(${book.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                tableBody.innerHTML += row;
+              });
+            });
+  }
+
+  function deleteBook(id) {
+    fetch(`${baseUrl}/${id}`, { method: "DELETE" })
+            .then(() => loadBooks());
+  }
+
+  loadBooks();
+</script>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+</script>
+</body>
+</html>

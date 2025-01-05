@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf Home</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            text-align: center;
+            margin-top: 100px;
+        }
+        .btn-group-vertical a {
+            width: 200px;
+            margin: 10px auto;
+        }
+        .dark-mode {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-dark-mode {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+<button class="btn btn-secondary btn-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+<div class="container">
+    <h1 class="mb-4">Welcome to Bookshelf</h1>
+    <p class="lead">Choose an action:</p>
+    <div class="btn-group-vertical">
+        <a href="view-books.html" class="btn btn-primary">View Books</a>
+        <a href="add-book.html" class="btn btn-success">Add a New Book</a>
+    </div>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>
+</body>
+</html>
